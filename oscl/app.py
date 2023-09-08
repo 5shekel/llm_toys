@@ -30,17 +30,22 @@ st.write('a quick attempt by an LLM to make an https://noisio.de/boards/levitati
 # Default parameters
 duration = 5  # 5 seconds
 sample_rate = 44100
-
+init_oscillators = [
+    {"frequency": 22.0, "amplitude": 0.6, "phase": 0.0},
+    {"frequency": 444.0, "amplitude": 0.3, "phase": 1.0},
+    {"frequency": 135.0, "amplitude": 0.3, "phase": 1.0},
+    {"frequency": 343.0, "amplitude": 0.3, "phase": 1.0},
+]
 col1, col2 = st.columns(2)
 
 with col1:
     # Sliders for four oscillators
     oscillators = []
-    for i in range(1, 5):
+    for i, init_osc in enumerate(init_oscillators, 1):
         st.subheader(f'Oscillator {i}')
-        frequency = st.slider(f'Frequency {i} (Hz)', 100.0, 2000.0, 440.0)
-        amplitude = st.slider(f'Amplitude {i}', 0.1, 1.0, 0.2)
-        phase = st.slider(f'Phase {i} (Radians)', 0.0, 2*np.pi, 0.0)
+        frequency = st.slider(f'Frequency {i} (Hz)', 100.0, 2000.0, init_osc["frequency"])
+        amplitude = st.slider(f'Amplitude {i}', 0.1, 1.0, init_osc["amplitude"])
+        phase = st.slider(f'Phase {i} (Radians)', 0.0, 2*np.pi, init_osc["phase"])
         oscillators.append({"frequency": frequency, "amplitude": amplitude, "phase": phase})
 
 
