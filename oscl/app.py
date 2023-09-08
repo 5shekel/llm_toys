@@ -25,6 +25,7 @@ def combine_oscillators(oscillators, duration, sample_rate):
 
 st.title('Multi-Oscillator App with Phase and Playback')
 st.write('a quick attempt by an LLM to make an https://noisio.de/boards/levitation-oscillator')
+st.write('source https://github.com/5shekel/llm_toys')
 st.image('https://i.imgur.com/UBwVcOo.jpeg', width=300)
 
 # Default parameters
