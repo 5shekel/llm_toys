@@ -1,5 +1,3 @@
-# an LLM attempt at an https://noisio.de/boards/levitation-oscillator
-
 import streamlit as st
 import numpy as np
 from pydub import AudioSegment
@@ -26,6 +24,8 @@ def combine_oscillators(oscillators, duration, sample_rate):
 
 
 st.title('Multi-Oscillator App with Phase and Playback')
+st.write('a quick attempt by an LLM to make an https://noisio.de/boards/levitation-oscillator')
+st.image('https://i.imgur.com/UBwVcOo.jpeg', width=300)
 
 # Default parameters
 duration = 5  # 5 seconds
@@ -48,6 +48,7 @@ st.line_chart(combined_wave[:5000])
 combined_wave_16bit = np.int16(combined_wave / np.max(np.abs(combined_wave)) * 32767)
 
 # Streamlit audio player
+"hit play to plyback the combined wave"
 st.audio(combined_wave_16bit, format='audio/wav', sample_rate=sample_rate, )
 
 # Play the combined wave continuously
@@ -61,7 +62,8 @@ def play_audio(wave, sample_rate):
     )
     play(audio_segment)
 
-if st.checkbox('Play'):
+"the live play doesn't work on streamlit sharing, but it does work locally"
+if st.checkbox('Play Audio Continuously'):
         play_audio(combined_wave, sample_rate)
 else:
     st.stop()
