@@ -24,7 +24,7 @@ def combine_oscillators(oscillators, duration, sample_rate):
 #make it wide
 st.set_page_config(layout="wide")
 
-st.title('Multi-Oscillator App with Phase and Playback')
+st.title('Multi-Oscillator App')
 st.write('a quick attempt by an LLM to make an https://noisio.de/boards/levitation-oscillator')
 
 # Default parameters
