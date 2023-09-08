@@ -21,51 +21,54 @@ def combine_oscillators(oscillators, duration, sample_rate):
         combined_wave += wave
     return combined_wave
 
-
+#make it wide
+st.set_page_config(layout="wide")
 
 st.title('Multi-Oscillator App with Phase and Playback')
 st.write('a quick attempt by an LLM to make an https://noisio.de/boards/levitation-oscillator')
-st.image('https://i.imgur.com/UBwVcOo.jpeg', width=300)
 
 # Default parameters
 duration = 5  # 5 seconds
 sample_rate = 44100
 
-# Sliders for four oscillators
-oscillators = []
-for i in range(1, 5):
-    st.subheader(f'Oscillator {i}')
-    frequency = st.slider(f'Frequency {i} (Hz)', 100.0, 2000.0, 440.0)
-    amplitude = st.slider(f'Amplitude {i}', 0.1, 1.0, 0.2)
-    phase = st.slider(f'Phase {i} (Radians)', 0.0, 2*np.pi, 0.0)
-    oscillators.append({"frequency": frequency, "amplitude": amplitude, "phase": phase})
+col1, col2 = st.columns(2)
 
-# Generate and plot the combined wave
-combined_wave = combine_oscillators(oscillators, duration, sample_rate)
-st.line_chart(combined_wave[:5000])
+with col1:
+    # Sliders for four oscillators
+    oscillators = []
+    for i in range(1, 5):
+        st.subheader(f'Oscillator {i}')
+        frequency = st.slider(f'Frequency {i} (Hz)', 100.0, 2000.0, 440.0)
+        amplitude = st.slider(f'Amplitude {i}', 0.1, 1.0, 0.2)
+        phase = st.slider(f'Phase {i} (Radians)', 0.0, 2*np.pi, 0.0)
+        oscillators.append({"frequency": frequency, "amplitude": amplitude, "phase": phase})
 
-# Convert the wave to 16-bit PCM WAV format
-combined_wave_16bit = np.int16(combined_wave / np.max(np.abs(combined_wave)) * 32767)
 
-# Streamlit audio player
-"hit play to plyback the combined wave"
-st.audio(combined_wave_16bit, format='audio/wav', sample_rate=sample_rate, )
+with col2:
+    st.image('https://i.imgur.com/UBwVcOo.jpeg')
+    # Generate and plot the combined wave
+    combined_wave = combine_oscillators(oscillators, duration, sample_rate)
+    st.line_chart(combined_wave[:5000])
 
-# Play the combined wave continuously
-def play_audio(wave, sample_rate):
-    wave = np.int16(wave / np.max(np.abs(wave)) * 32767)
-    audio_segment = AudioSegment(
-        wave.tobytes(), 
-        frame_rate=sample_rate,
-        sample_width=2,  # 16-bit PCM
-        channels=1
-    )
-    play(audio_segment)
+    # Convert the wave to 16-bit PCM WAV format
+    combined_wave_16bit = np.int16(combined_wave / np.max(np.abs(combined_wave)) * 32767)
 
-"the live play doesn't work on streamlit sharing, but it does work locally"
-if st.checkbox('Play Audio Continuously'):
-        play_audio(combined_wave, sample_rate)
-else:
-    st.stop()
+    # Streamlit audio player
+    "hit play to plyback the combined wave"
+    st.audio(combined_wave_16bit, format='audio/wav', sample_rate=sample_rate, )
+    # Play the combined wave continuously
+    def play_audio(wave, sample_rate):
+        wave = np.int16(wave / np.max(np.abs(wave)) * 32767)
+        audio_segment = AudioSegment(
+            wave.tobytes(), 
+            frame_rate=sample_rate,
+            sample_width=2,  # 16-bit PCM
+            channels=1
+        )
+        play(audio_segment)
 
-st.write('source https://github.com/5shekel/llm_toys')
+    "sadly, the live play doesn't work on streamlit sharing, but it does work locally"
+    if st.checkbox('Play Audio Continuously'):
+            play_audio(combined_wave, sample_rate)
+    else:
+        st.stop()
